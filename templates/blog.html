@@ -1,0 +1,14 @@
+$def with (posts)
+$var title = 'Blog'
+<h2 id="id_div">Blog posts</h2>
+<div class="well exposition">
+    <ul>
+    $for post in posts:
+        <li>
+            <a href="/view/$post.id">$post.title</a>
+            from $datestr(post.posted_on)
+            $if session.privilege == 1:
+                <a href="/edit/$post.id">Edit</a>
+        </li>
+    </ul>
+</div>

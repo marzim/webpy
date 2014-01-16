@@ -1,0 +1,9 @@
+$def with (post)
+$var title = 'View'
+<div class="well exposition">
+<h3>$post.title</h3>
+    <p>
+        <i>$datestr(post.posted_on)</i><br/><br/>
+        $post.content
+    </p>
+</div>
