@@ -1,9 +1,9 @@
-$def with (post)
+$def with (post, user, content)
 $var title = 'View'
-<div class="well exposition">
+<div class="container">
 <h3>$post.title</h3>
     <p>
-        <i>$datestr(post.posted_on)</i><br/><br/>
-        $post.content
+        <i>$datestr(post.posted_on) by $user</i><br/><br/>
+        $:content
     </p>
 </div>

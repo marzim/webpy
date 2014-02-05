@@ -1,10 +1,16 @@
 import web
-from base import session, render, logged, model
+from base import session, render, withprivilege
+from blogmodel import BlogModel
+from loginmodel import LoginModel
+from urlify import URLify
+
+blogmodel = BlogModel()
+loginmodel = LoginModel()
 
 class Blog:
 
     def GET(self):
-        posts = model.get_allposts()
+        posts = blogmodel.get_allposts()
         return render.blog(posts)
 
 class New:
@@ -19,26 +25,27 @@ class New:
     )
 
     def GET(self):
-        if not logged():
-            raise web.seeother('/')
 
-        form = self.form()
-        return render.new(form)
+        if withprivilege():
+            form = self.form()
+            return render.blognew(form)
+        else:
+            raise web.seeother('/blog')
 
     def POST(self):
         form = self.form()
         if not form.validates():
-            return render.new(form)
-        model.new_post(form.d.title, form.d.content, session.login)
-        raise web.seeother('/')
+            return render.blognew(form)
+        blogmodel.new_post(form.d.title, form.d.content, session.login)
+        raise web.seeother('/blog')
 
 class Edit:
     def GET(self, id):
-        if not logged():
-            raise web.seeother('/')
+        if not withprivilege():
+            raise web.seeother('/blog')
 
         try:
-            post = model.get_anonymouspost(int(id))
+            post = blogmodel.get_anonymouspost(int(id))
             form = New.form()
             form.fill(post)
             return render.blogedit(post, form)
@@ -47,23 +54,26 @@ class Edit:
 
     def POST(self, id):
         form = New.form()
-        post = model.get_anonymouspost(int(id))
+        post = blogmodel.get_anonymouspost(int(id))
         if not form.validates():
             return render.blogedit(post, form)
-        model.update_post(int(id), form.d.title, form.d.content)
-        raise web.seeother('/')
+
+        blogmodel.update_post(int(id), form.d.title, form.d.content)
+        raise web.seeother('/blog')
 
 class View:
     def GET(self, id):
         """View single post"""
-        post = model.get_anonymouspost(int(id))
-        return render.blogview(post)
+        post = blogmodel.get_anonymouspost(int(id))
+        user = loginmodel.get_userbyid(int(post['userid']))['user']
+        content = URLify().formatstring(post.content)
+        return render.blogview(post, user, content)
 
 class Delete:
     def GET(self, id):
-        if not logged():
-            raise web.seeother('/')
+        if not withprivilege:
+            raise web.seeother('/blog')
 
     def POST(self, id):
-        model.del_post(int(id))
-        raise web.seeother('/')
+        blogmodel.del_post(int(id))
+        raise web.seeother('/blog')

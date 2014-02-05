@@ -1,0 +1,37 @@
+$def with (error)
+
+<h3>New customer</h3>
+$if error:
+    <p id="id_login_error">$error</p>
+<form class="form-horizontal" role="form" method="POST">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" style="width:40%;" placeholder="Name" id="name" name="name" required="" autofocus="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="amount" class="col-sm-2 control-label">Address</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" style="width:40%;" placeholder="Address" id="address" name="address" required="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Cell Number</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" style="width:40%;" placeholder="Cell number" id="cellno" name="cellno">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="amount" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control input-sm" style="width:40%;" placeholder="Email address" id="email" name="email" required="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+            <button class="btn btn-lg btn-primary" style="width:40%;" type="submit">Submit</button>
+        </div>
+    </div>
+</form>

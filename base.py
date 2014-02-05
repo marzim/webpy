@@ -1,18 +1,26 @@
 import web
-import model
 
 web.config.debug = False
 
 urls = (
 '/', 'Index',
-'/login','login.Login',
-'/logout','Logout',
-'/register', 'register.Register',
-'/view/(\d+)', 'blog.View',
-'/new', 'blog.New',
-'/delete/(\d+)', 'blog.Delete',
-'/edit/(\d+)', 'blog.Edit',
-'/blog', 'blog.Blog',
+'/login/?','login.Login',
+'/logout/?','Logout',
+'/register/?', 'register.Register',
+'/blog/view/(\d+)', 'blog.View',
+'/blog/new/?', 'blog.New',
+'/blog/delete/(\d+)', 'blog.Delete',
+'/blog/edit/(\d+)', 'blog.Edit',
+'/blog/?', 'blog.Blog',
+'/savings/?', 'savings.Savings',
+'/savings/contribution/?', 'savings.Contribution',
+'/savings/guidelines/?', 'savings.Guidelines',
+'/savings/loans/?', 'savings.Loans',
+'/savings/loans/add/?', 'savings.AddLoan',
+'/savings/customers/?', 'savings.Customers',
+'/savings/customers/add/?', 'savings.AddCustomer',
+'/errorpage/?','ErrorPage',
+
 )
 
 app = web.application(urls, globals())
@@ -21,13 +29,20 @@ session = web.session.Session(app, store, initializer={'login': 0, 'privilege': 
 
 t_globals = {
  'datestr': web.datestr,
- 'session': session
+ 'session': session,
+ 'web': web,
  }
 
 render = web.template.render('/home/marzim83/main/webpy/templates', base='base', globals=t_globals)
 
 def logged():
     if session.login > 0:
+        return True
+    else:
+        return False
+
+def withprivilege():
+    if session.privilege == 1:
         return True
     else:
         return False
@@ -43,4 +58,15 @@ class Logout:
         session.kill()
         raise web.seeother('/')
 
+class ErrorPage:
+    def GET(self):
+        return render.errorpage()
+
+def notfound():
+    raise web.seeother('/errorpage')
+
+app.notfound = notfound
 application = app.wsgifunc()
+
+
+

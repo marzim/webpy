@@ -11,9 +11,11 @@
 
 import web
 from web import form
-from base import render, model, logged, session
+from base import render, logged, session
+from loginmodel import LoginModel
 import hashlib
 
+model = LoginModel()
 
 class Register:
 
