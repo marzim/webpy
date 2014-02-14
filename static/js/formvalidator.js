@@ -132,4 +132,5 @@ $(document).ready(function(){
   });
 
     $('#interest').val(Math.round($('#interest_hv').val()));
+    $('#privilege').val($('#privilege_hv').val());
 });

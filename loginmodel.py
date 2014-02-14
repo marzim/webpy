@@ -25,5 +25,5 @@ class LoginModel:
     def del_user(self,user):
         self.db.delete('users', where="user=$user", vars=locals())
 
-    def update_user(self,user, pwd, email):
-        self.db.update('users', where="user=$user", vars=locals(), pwd=pwd, email=email)
+    def update_user(self,id, user, email, privilege):
+        self.db.update('users', where="id=$id", vars=locals(), email=email, privilege=privilege)

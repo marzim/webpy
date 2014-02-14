@@ -5,6 +5,8 @@ web.config.debug = False
 urls = (
 '/', 'Index',
 '/login/?','login.Login',
+'/users/?','login.Users',
+'/users/edit/(\d+)', 'login.EditUser',
 '/logout/?','Logout',
 '/register/?', 'register.Register',
 '/blog/view/(\d+)', 'blog.View',

@@ -11,45 +11,32 @@
 
 import web
 from loginmodel import LoginModel
-from base import render, logged, session
+from base import render, logged, session, withprivilege
 import hashlib
 
 model = LoginModel()
 
 class Login:
 
-    #vuser_req = form.Validator("Username not provided.", bool)
-    #vpass_req = form.Validator("Password not provided.", bool)
-    #vuser_exist = form.Validator("Username doesn't exist.", lambda u: u is None or model.get_user(u.username.strip()) is not None)
-    #vpass_exist = form.Validator("Password didn't match", lambda i: hashlib.sha1("sAlT754-"+i.password).hexdigest() == model.get_user(i.username.strip())['pwd'])
-
-    #login_form = form.Form(
-    #    form.Textbox("username", description="Username"),
-    #    form.Password("password", description="Password"),
-    #    form.Button("Submit", type="submit", description="Login"),
-    #    validators = [vuser_exist, vpass_exist],
-    #    )
     def GET(self):
         """Login page"""
-        #f = self.login_form()
         if not logged():
             return render.login("")
         else:
             raise web.seeother('/')
 
     def POST(self):
-
-        #f = self.login_form()
         f = web.input()
         error_msg = "Incorrect username and password!"
         if not self.authenticate():
             return render.login(error_msg)
         else:
-            session.login = model.get_user(f.username.strip())['id']
+            user = model.get_user(f.username.strip())
+            session.login = user.id
+            session.privilege = user.privilege;
             if f.username.strip() == "admin":
                 session.privilege = 1
-            else:
-                session.privilege = 0
+
             session.user = f.username.strip()
             raise web.seeother('/')
 
@@ -62,3 +49,24 @@ class Login:
             return False
         else:
             return True
+
+class Users:
+    def GET(self):
+        if withprivilege():
+            users = model.get_users()
+            return render.users(users)
+        else:
+            raise web.seeother('/')
+
+class EditUser:
+    def GET(self, id):
+        if withprivilege():
+            user = model.get_userbyid(int(id))
+            return render.usersedit(user)
+        else:
+            raise web.seeother('/')
+
+    def POST(self, id):
+        data = web.input()
+        model.update_user(int(id), data.username, data.email, int(data.privilege))
+        raise web.seeother('/users')
