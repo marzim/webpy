@@ -130,4 +130,6 @@ $(document).ready(function(){
           alert("error: " + err.message);
       }
   });
+
+    $('#interest').val(Math.round($('#interest_hv').val()));
 });
