@@ -38,20 +38,51 @@ class Register:
     def GET(self):
         # do $:f.render() in the template
         if not logged():
-            f = self.register_form()
-            return render.register(f)
+            #f = self.register_form()
+            return render.register(None, None)
         else:
             raise web.seeother('/')
 
     def POST(self):
-        f = self.register_form()
-
-        if not f.validates():
-            return render.register(f)
+        data = web.input()
+        if self.userisexist(data.username) and not self.passwordmatch(data):
+            return render.register({
+                "user_err": "Username already exist!",
+                "pass_err": "Password didn't match!",
+                },
+                data)
+        elif self.userisexist(data.username):
+            return render.register({
+                "user_err": "Username already exist!",
+                "pass_err": "",
+                },
+                data)
+        elif not self.passwordmatch(data):
+            return render.register({
+                "user_err": "",
+                "pass_err": "Password didn't match!",
+                },
+                data)
         else:
-            encrypt_pass = hashlib.sha1("sAlT754-"+f.d.password).hexdigest()
-            model.new_user(f.d.username, encrypt_pass, f.d.email)
-            session.user = f.d.username.strip()
-            session.privilege = 1
-            session.login = model.get_user(f.d.username.strip())['id']
+            model.new_user(data.username, self.encryptpass(data.password), data.email)
+            session.user = data.username.strip()
+            session.privilege = 0
+            session.login = model.get_user(data.username.strip())['id']
             raise web.seeother('/')
+
+    def passwordmatch(self, data):
+        if data.password != data.password2:
+            return False
+        else:
+            return True
+
+    def userisexist(self,name):
+        username = model.get_user(name)
+        if username is None:
+            return False
+        else:
+            return True
+
+    def encryptpass(self, password):
+        return hashlib.sha1("sAlT754-"+password).hexdigest()
+

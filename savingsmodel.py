@@ -9,7 +9,6 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
-import datetime
 from model import Model
 
 class SavingsModel:
@@ -22,7 +21,7 @@ class SavingsModel:
         return
 
     def get_loans(self):
-        return self.db.select(['loans', 'customers'], where='loans.customerid=customers.id', order='loans.id DESC')
+        return self.db.select(['customers', 'loans'], where='loans.customerid=customers.id', order='loans.id DESC')
 
     def get_post(self,id,uid):
         try:
@@ -30,19 +29,23 @@ class SavingsModel:
         except IndexError:
             return None
 
-    def get_anonymouspost(self,id):
+    def get_loan(self,id):
         try:
-            return self.db.select('entries', where='id=$id', vars=locals())[0]
+            return self.db.select('loans', where='id=$id', vars=locals())[0]
         except IndexError:
             return None
 
-    def new_post(self,title, text, userid):
-        self.db.insert('entries', title=title, content=text, posted_on=datetime.datetime.utcnow(), userid=userid)
+    def new_loan(self, customerid, date_rel, date_due, amount, interest, total_payable,
+                total_payment, outstanding_bal, fully_paidon):
+        self.db.insert('loans', customerid=customerid, date_rel=date_rel, date_due=date_due, amount=amount, interest=interest,
+                total_payable=total_payable, total_payment=total_payment, outstanding_bal=outstanding_bal, fully_paidon=fully_paidon)
 
     def del_post(self,id):
         self.db.delete('entries', where="id=$id", vars=locals())
 
-    def update_post(self,id, title, text):
-        self.db.update('entries', where="id=$id", vars=locals(), title=title, content=text)
+    def update_loan(self,id, date_rel, date_due, amount, interest, total_payable,
+                total_payment, outstanding_bal, fully_paidon):
+        self.db.update('loans', where="id=$id", vars=locals(), date_rel=date_rel, date_due=date_due, amount=amount, interest=interest,
+                total_payable=total_payable, total_payment=total_payment, outstanding_bal=outstanding_bal, fully_paidon=fully_paidon)
 
 

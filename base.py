@@ -17,10 +17,11 @@ urls = (
 '/savings/guidelines/?', 'savings.Guidelines',
 '/savings/loans/?', 'savings.Loans',
 '/savings/loans/add/?', 'savings.AddLoan',
+'/savings/loans/edit/(\d+)', 'savings.EditLoan',
 '/savings/customers/?', 'savings.Customers',
 '/savings/customers/add/?', 'savings.AddCustomer',
 '/errorpage/?','ErrorPage',
-
+'/savings/customers/edit/(\d+)', 'savings.EditCustomer',
 )
 
 app = web.application(urls, globals())

@@ -36,7 +36,7 @@ class CustomerModel:
     def del_customer(self,id):
         self.db.delete('customers', where="id=$id", vars=locals())
 
-    def update_customer(self, id, name, address, cellno, email):
-        self.db.update('entries', where="id=$id", vars=locals(), name=name, address=address, cellno=cellno, email=email)
+    def update_customer(self, id, address, cellno, email):
+        self.db.update('customers', where='id=$id', vars=locals(), address=address, cellno=cellno, email=email)
 
 
