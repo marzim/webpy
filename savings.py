@@ -70,7 +70,6 @@ class EditLoan:
 
 
 class Guidelines:
-
     def GET(self):
         if withprivilege():
             guides = model.get_guidelines()
