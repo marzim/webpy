@@ -59,6 +59,7 @@ class Users:
         else:
             raise web.seeother('/')
 
+
 class EditUser:
     def GET(self, id):
         if withprivilege() and superuser():

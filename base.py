@@ -30,13 +30,19 @@ app = web.application(urls, globals())
 store = web.session.DiskStore('sessions')
 session = web.session.Session(app, store, initializer={'login': 0, 'privilege': 0, 'user': 'anonymous'})
 
+web.config.smtp_server = 'smtp.gmail.com'
+web.config.smtp_port = 587
+web.config.smtp_username = 'mattbrnrdc@gmail.com'
+web.config.smtp_password = 'mar_180JKL'
+web.config.smtp_starttls = True
+
 t_globals = {
  'datestr': web.datestr,
  'session': session,
  'web': web,
  }
 
-render = web.template.render('/home/marzim83/main/webpy/templates', base='base', globals=t_globals)
+render = web.template.render('/home/simplecode/web-apps/main/webpy/templates', base='base', globals=t_globals)
 
 def logged():
     if session.login > 0:
@@ -55,6 +61,9 @@ def superuser():
         return True
     else:
         return False
+
+def sendemail(to, subject, message):
+    web.sendmail('mattbrnrdc@gmail.com', to, subject, message)
 
 class Index:
     def GET(self):
@@ -76,6 +85,4 @@ def notfound():
 
 app.notfound = notfound
 application = app.wsgifunc()
-
-
 
