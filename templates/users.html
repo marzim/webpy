@@ -6,11 +6,18 @@ $var title = 'Users'
         <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Privilege</th>
         </tr>
         $for user in users:
             <tr>
-                <td><a href="/users/edit/$user.id">$user.user</a></td>
+                <td>
+                $if session.user == "admin":
+                    <a href="/users/edit/$user.id">$user.user</a>
+                $else:
+                    $user.user
+                </td>
                 <td>$user.email</td>
+                <td>$user.privilege</td>
             </tr>
     </table>
 

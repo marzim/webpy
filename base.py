@@ -50,6 +50,12 @@ def withprivilege():
     else:
         return False
 
+def superuser():
+    if session.user == "admin":
+        return True
+    else:
+        return False
+
 class Index:
     def GET(self):
         """Show page"""

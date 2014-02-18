@@ -117,13 +117,23 @@ $(document).ready(function(){
       $('#t_payment').change();
   });
 
+  $('#payment').change(function(){
+     var tpayment = parseFloat($('#totalpayment_hv').val());
+     var payment = parseFloat($('#payment').val());
+     if(tpayment){
+         payment += parseFloat(tpayment);
+     }
+     $('#t_payment').val(payment);
+     $('#t_payment').change();
+  });
+
   $('#t_payment').change(function(){
       try{
           var tpayable = parseFloat($('#t_payable').val());
           var tpayment = parseFloat($('#t_payment').val());
           if(!tpayment){
             $('#outs_bal').val(tpayable);
-          }else if(tpayment >= 0){
+          }else{
               $('#outs_bal').val(tpayable - tpayment);
           }
       }catch(err){

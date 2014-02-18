@@ -11,7 +11,7 @@
 
 import web
 from loginmodel import LoginModel
-from base import render, logged, session, withprivilege
+from base import render, logged, session, withprivilege, superuser
 import hashlib
 
 model = LoginModel()
@@ -36,6 +36,7 @@ class Login:
             session.privilege = user.privilege;
             if f.username.strip() == "admin":
                 session.privilege = 1
+                session.user = f.username.strip()
 
             session.user = f.username.strip()
             raise web.seeother('/')
@@ -60,7 +61,7 @@ class Users:
 
 class EditUser:
     def GET(self, id):
-        if withprivilege():
+        if withprivilege() and superuser():
             user = model.get_userbyid(int(id))
             return render.usersedit(user)
         else:
