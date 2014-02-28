@@ -15,7 +15,8 @@ urls = (
 '/blog/edit/(\d+)', 'blog.Edit',
 '/blog/?', 'blog.Blog',
 '/savings/?', 'savings.Savings',
-'/savings/contribution/?', 'savings.Contribution',
+'/savings/contributions/?', 'savings.Contributions',
+'/savings/contributions/view/(\d+)', 'savings.ViewContributions',
 '/savings/guidelines/?', 'savings.Guidelines',
 '/savings/loans/?', 'savings.Loans',
 '/savings/loans/add/?', 'savings.AddLoan',
@@ -32,8 +33,8 @@ session = web.session.Session(app, store, initializer={'login': 0, 'privilege': 
 
 web.config.smtp_server = 'smtp.gmail.com'
 web.config.smtp_port = 587
-web.config.smtp_username = 'mattbrnrdc@gmail.com'
-web.config.smtp_password = 'mar_180JKL'
+web.config.smtp_username = 'savingxfun@gmail.com'
+web.config.smtp_password = 'mar_180)(*'
 web.config.smtp_starttls = True
 
 t_globals = {
@@ -63,7 +64,7 @@ def superuser():
         return False
 
 def sendemail(to, subject, message):
-    web.sendmail('mattbrnrdc@gmail.com', to, subject, message)
+    web.sendmail('savingxfun@gmail.com', to, subject, message)
 
 class Index:
     def GET(self):
